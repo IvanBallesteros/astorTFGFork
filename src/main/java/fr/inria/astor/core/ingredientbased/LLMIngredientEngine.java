@@ -219,7 +219,7 @@ public class LLMIngredientEngine extends ExhaustiveSearchEngine implements Ingre
         String prompt = LLMPromptTemplate.fillTemplate(template, buggyCode, testCode, maxP);
         
 		System.out.println("-------------------------------------------------");
-        System.out.println("\nSending prompt to LLM model" + llmModel + ":\n" + prompt);
+        System.out.println("\nSending prompt to LLM model: " + llmModel + "\n" + prompt);
 
         try {
             // Get the response from the LLM with explicit parameters
