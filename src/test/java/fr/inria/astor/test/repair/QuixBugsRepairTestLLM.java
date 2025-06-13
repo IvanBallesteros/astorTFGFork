@@ -235,6 +235,7 @@ public class QuixBugsRepairTestLLM {
 	 * 
 	 * @throws Exception
 	 */
+	//@Test(timeout=10)
 	@Test
 	public void test_depth_first_searchRepair() throws Exception {
 		AstorMain main1 = new AstorMain();
