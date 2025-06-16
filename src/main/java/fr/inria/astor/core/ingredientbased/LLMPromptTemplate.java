@@ -13,22 +13,30 @@ public class LLMPromptTemplate {
     private static final Map<String, String> predefinedTemplates = new HashMap<>();
     
     // Initialize predefined templates
-    static {
-        // More detailed repair prompt with context
-        
+    static {       
         
         // New template for multiple solutions
         predefinedTemplates.put(
             "MULTIPLE_SOLUTIONS",
-                "There's a bug in the following Java code:\n\n{buggycode}\n" +
-                "The failing test case is:\n\n{testcode}\n" +
-                "Please provide {nsolutions} different possible fixes that might make the test pass.\n" +
-                "Format your response as follows:\n" +
-                "SOLUTION 1:\n[first solution code]\n" +
-                "SOLUTION 2:\n[second solution code]\n" +
-                "SOLUTION 3:\n[third solution code]\n" +
-                "Each solution should be a single line of code that can replace the buggy line, do not write code in different lines." +
-                "Do not include extra explanations, just the code solutions."
+            "There's a bug in the following Java code:\n\n{buggycode}\n" +
+            "The failing test case is:\n\n{testcode}\n" +
+            "Please provide {nsolutions} different possible fixes that might make the test pass.\n" +
+            "Format your response as follows:\n" +
+            "SOLUTION 1:\n[first solution code]\n" +
+            "SOLUTION 2:\n[second solution code]\n" +
+            "SOLUTION 3:\n[third solution code]\n" +
+            "Each solution should be a single line of code that can replace the buggy line, do not write code in different lines." +
+            "Do not include extra explanations, just the code solutions."
+        );
+        predefinedTemplates.put(
+            "UNIQUE_SOLUTION",
+            "There's a bug in the following Java code:\n\n{buggycode}\n" +
+            "The failing test case is:\n\n{testcode}\n" +
+            "Please provide one possible fix that might make the test pass.\n" +
+            "Format your response as follows:\n" +
+            "SOLUTION:\n[first solution code]\n" +
+            "Solution should be a single line of code that can replace the buggy line, do not write code in different lines." +
+            "Do not include extra explanations, just the code solutions."
         );
     }
     

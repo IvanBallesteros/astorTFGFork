@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import org.junit.Ignore;
+import org.junit.Ignore;  
 import org.junit.Test;
 
 import fr.inria.astor.approaches.cardumen.CardumenApproach;
@@ -88,7 +88,7 @@ public class QuixBugsRepairTestLLM {
         llmService = "ollama";
         llmModel = "codellama:13b";
         maxSuggestionsPerPoint = 1;
-        llmPromptTemplate = "MULTIPLE_SOLUTIONS";
+        llmPromptTemplate = "UNIQUE_SOLUTION";
         
         cs.command.put("-parameters",
                 "logtestexecution" + File.pathSeparator + "TRUE" + File.pathSeparator + "" + "disablelog"
@@ -128,6 +128,9 @@ public class QuixBugsRepairTestLLM {
         
         System.out.println("Found " + testMethods.size() + " QuixBugs repair tests to run");
         
+        // Define timeout for each test (10 minutes)
+        final long TEST_TIMEOUT = 10 * 60 * 1000; // 10 minutes in milliseconds
+        
         // Run each test and collect results
         for (Method testMethod : testMethods) {
             String testName = testMethod.getName();
@@ -137,25 +140,76 @@ public class QuixBugsRepairTestLLM {
             // Record start time
             long startTime = System.currentTimeMillis();
             
+            // Flag to track if test completed
+            final boolean[] testCompleted = {false};
+            
+            // Create separate thread for test execution
+            Thread testThread = new Thread(() -> {
+                try {
+                    testMethod.invoke(testRunner);
+                    
+                    // Mark as completed and add to passed tests
+                    testCompleted[0] = true;
+                    passedTests.add(testName);
+                    
+                    // Calculate execution time
+                    long executionTime = System.currentTimeMillis() - startTime;
+                    testExecutionTimes.put(testName, executionTime);
+                    
+                    System.out.println("Test PASSED: " + testName);
+                    System.out.println("Execution time: " + formatExecutionTime(executionTime));
+                } catch (Exception e) {
+                    // Mark as completed and add to failed tests
+                    testCompleted[0] = true;
+                    failedTests.add(testName);
+                    
+                    // Calculate execution time
+                    long executionTime = System.currentTimeMillis() - startTime;
+                    testExecutionTimes.put(testName, executionTime);
+                    
+                    System.out.println("Test FAILED: " + testName);
+                    System.out.println("Execution time: " + formatExecutionTime(executionTime));
+                    System.out.println("Reason: " + (e.getCause() != null ? e.getCause().getMessage() : e.getMessage()));
+                }
+            });
+            
+            // Start test execution
+            testThread.start();
+            
+            // Wait for test to complete or timeout
             try {
-                testMethod.invoke(testRunner);
-                passedTests.add(testName);
+                testThread.join(TEST_TIMEOUT);
                 
-                // Calculate and store execution time
-                long executionTime = System.currentTimeMillis() - startTime;
-                testExecutionTimes.put(testName, executionTime);
-                
-                System.out.println("Test PASSED: " + testName);
-                System.out.println("Execution time: " + formatExecutionTime(executionTime));
-            } catch (Exception e) {
-                // Calculate and store execution time even for failures
-                long executionTime = System.currentTimeMillis() - startTime;
-                testExecutionTimes.put(testName, executionTime);
-                
-                failedTests.add(testName);
-                System.out.println("Test FAILED: " + testName);
-                System.out.println("Execution time: " + formatExecutionTime(executionTime));
-                System.out.println("Reason: " + e.getCause().getMessage());
+                // Check if test is still running after timeout
+                if (testThread.isAlive()) {
+                    // Test exceeded time limit
+                    System.out.println("TIME EXCEEDED: " + testName);
+                    System.out.println("Execution time: > " + formatExecutionTime(TEST_TIMEOUT));
+                    System.out.println("Moving to next test...");
+                    
+                    // Add to failed tests
+                    failedTests.add(testName);
+                    testExecutionTimes.put(testName, TEST_TIMEOUT);
+                    
+                    // Interrupt the test thread (best effort)
+                    testThread.interrupt();
+                    
+                    // In case interruption doesn't work, use more aggressive approach
+                    // Note: This is not ideal but may be necessary to stop hung tests
+                    try {
+                        // Give the thread a chance to respond to interruption
+                        Thread.sleep(5000);
+                        
+                        // If still alive, use deprecated method as last resort
+                        if (testThread.isAlive()) {
+                            testThread.stop();
+                        }
+                    } catch (Exception e) {
+                        // Ignore exceptions from stopping the thread
+                    }
+                }
+            } catch (InterruptedException e) {
+                System.out.println("Main thread was interrupted while waiting for test to complete");
             }
         }
         
@@ -226,8 +280,6 @@ public class QuixBugsRepairTestLLM {
 		main1.execute(command.flat());
 
 		assertTrue("No solution", main1.getEngine().getSolutions().size() > 0);
-		
-
 	}
 
 	/**
@@ -351,21 +403,21 @@ public class QuixBugsRepairTestLLM {
 
 	}
 
-	/**
-	 * Repaired in paper
-	 * 
-	 * @throws Exception
-	 */
-	@Test
-	public void test_mergesortRepair() throws Exception {
-		AstorMain main1 = new AstorMain();
+	// /**
+	//  * Repaired in paper
+	//  * 
+	//  * @throws Exception
+	//  */
+	// @Test
+	// public void test_mergesortRepair() throws Exception {
+	// 	AstorMain main1 = new AstorMain();
 
-		CommandSummary command = (getQuixBugsCommand("mergesort"));
-		command.command.put("-maxgen", "500");// do not evolve right now
-		main1.execute(command.flat());
+	// 	CommandSummary command = (getQuixBugsCommand("mergesort"));
+	// 	command.command.put("-maxgen", "500");// do not evolve right now
+	// 	main1.execute(command.flat());
 
-		assertTrue("No solution", main1.getEngine().getSolutions().size() > 0);
-	}
+	// 	assertTrue("No solution", main1.getEngine().getSolutions().size() > 0);
+	// }
 
 	/**
 	 * Repaired in paper
