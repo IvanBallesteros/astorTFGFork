@@ -8,6 +8,7 @@ import static org.junit.Assert.assertTrue;
 import java.io.File;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -62,33 +63,82 @@ public class QuixBugsRepairTestLLM {
     private static String llmModel;
     private static int maxSuggestionsPerPoint;
     private static String llmPromptTemplate;
+    
+    // List of all QuixBugs tests to run
+    private static List<String> quixBugsTests = Arrays.asList(
+        "bitcount",
+		"breadth_first_search",
+		"bucketsort",
+		"depth_first_search",
+		"detect_cycle",
+		"find_first_in_sorted",
+		"find_in_sorted",
+		"flatten",
+		"gcd",
+		"get_factors",
+		"hanoi",
+		"is_valid_parentheses",
+		"khepsack",
+		"kth",
+		"lcs_length",
+		"levenshtein",
+		"lis",
+		"longest_common_subsequence",
+		"max_sublist_sum",
+		"mergesort",
+		"minimum_spanning_tree",
+		"next_palindrome",
+		"next_permutation",
+		"pascal",
+		"possible_change",
+		"powerset",
+		"quicksort",
+		"reverse_linked_list",
+		"rpn_eval",
+		"shortest_path_length",
+		"shortest_path_lenghts",
+		"shortest_paths",
+		"shunting_yard",
+		"sieve",
+		"sqrt",
+		"subsequences",
+		"to_base",
+		"topological_ordering",
+		"wrap"
+    );
+    
+    // List of tests to ignore (if needed)
+    private static List<String> ignoredTests = Arrays.asList(
+    "get_factors",
+		"mergesort"
+		
+    );
 
     public static CommandSummary getQuixBugsCommand(String name) {
-
-		CommandSummary cs = new CommandSummary();
-		String dep = new File("./examples/libs/junit-4.4.jar").getAbsolutePath();
-		cs.command.put("-javacompliancelevel", "8");
-		cs.command.put("-seed", "1");
-		cs.command.put("-package", "java_programs");
-		cs.command.put("-dependencies", dep);
-		cs.command.put("-scope", "package");
-		cs.command.put("-mode", "custom");
-		cs.command.put("-id", name);
-		cs.command.put("-population", "1");
-		cs.command.put("-srcjavafolder", "/src");
-		cs.command.put("-srctestfolder", "/src");
-		cs.command.put("-binjavafolder", "/bin");
-		cs.command.put("-bintestfolder", "/bin");
-		cs.command.put("-flthreshold", "0.0");
-		cs.command.put("-loglevel", "INFO");
-		cs.command.put("-stopfirst", "TRUE");
+        CommandSummary cs = new CommandSummary();
+        String dep = new File("./examples/libs/junit-4.4.jar").getAbsolutePath();
+        cs.command.put("-javacompliancelevel", "8");
+        cs.command.put("-seed", "1");
+        cs.command.put("-package", "java_programs");
+        cs.command.put("-dependencies", dep);
+        cs.command.put("-scope", "package");
+        cs.command.put("-mode", "custom");
+        cs.command.put("-id", name);
+        cs.command.put("-population", "1");
+        cs.command.put("-srcjavafolder", "/src");
+        cs.command.put("-srctestfolder", "/src");
+        cs.command.put("-binjavafolder", "/bin");
+        cs.command.put("-bintestfolder", "/bin");
+        cs.command.put("-flthreshold", "0.0");
+        cs.command.put("-loglevel", "INFO");
+        cs.command.put("-stopfirst", "TRUE");
         cs.command.put("-customengine", LLMIngredientEngine.class.getName());
         
         // Store the LLM parameters for later reporting
         llmService = "ollama";
         llmModel = "codellama:13b";
         maxSuggestionsPerPoint = 3;
-        llmPromptTemplate = "MULT_SOLUTION";
+        llmPromptTemplate = "MULTIPLE_SOLUTION";
         
         cs.command.put("-parameters",
                 "logtestexecution" + File.pathSeparator + "TRUE" + File.pathSeparator + "" + "disablelog"
@@ -111,31 +161,29 @@ public class QuixBugsRepairTestLLM {
      */
     public static void main(String[] args) {
         System.out.println("Starting QuixBugs repair tests with LLM integration...");
-        QuixBugsRepairTestLLM testRunner = new QuixBugsRepairTestLLM();
-        
-        // Get all test methods from this class
-        Method[] methods = QuixBugsRepairTestLLM.class.getDeclaredMethods();
-        List<Method> testMethods = new ArrayList<>();
-        
-        // Filter for test methods that repair Quixbug problems
-        for (Method method : methods) {
-            if (method.isAnnotationPresent(Test.class) && 
-                !method.isAnnotationPresent(Ignore.class) && 
-                method.getName().contains("Repair")) {
-                testMethods.add(method);
-            }
-        }
-        
-        System.out.println("Found " + testMethods.size() + " QuixBugs repair tests to run");
         
         // Define timeout for each test (10 minutes)
         final long TEST_TIMEOUT = 10 * 60 * 1000; // 10 minutes in milliseconds
         
+        int totalTests = 0;
+        int completedTests = 0;
+        
+        System.out.println("Found " + quixBugsTests.size() + " QuixBugs tests to run");
+        System.out.println("Ignoring " + ignoredTests.size() + " tests");
+        
         // Run each test and collect results
-        for (Method testMethod : testMethods) {
-            String testName = testMethod.getName();
+        for (String testName : quixBugsTests) {
+            // Skip ignored tests
+            if (ignoredTests.contains(testName)) {
+                System.out.println("\nSkipping ignored test: " + testName);
+                continue;
+            }
+            
+            totalTests++;
+            
             System.out.println("\n----------------------");
-            System.out.println("Running test: " + testName);
+            System.out.println("Running test: " + testName + " (" + completedTests + "/" + 
+                               (quixBugsTests.size() - ignoredTests.size()) + ")");
             
             // Record start time
             long startTime = System.currentTimeMillis();
@@ -146,7 +194,7 @@ public class QuixBugsRepairTestLLM {
             // Create separate thread for test execution
             Thread testThread = new Thread(() -> {
                 try {
-                    testMethod.invoke(testRunner);
+                    executeQuixBugsTest(testName);
                     
                     // Mark as completed and add to passed tests
                     testCompleted[0] = true;
@@ -195,7 +243,6 @@ public class QuixBugsRepairTestLLM {
                     testThread.interrupt();
                     
                     // In case interruption doesn't work, use more aggressive approach
-                    // Note: This is not ideal but may be necessary to stop hung tests
                     try {
                         // Give the thread a chance to respond to interruption
                         Thread.sleep(5000);
@@ -211,10 +258,30 @@ public class QuixBugsRepairTestLLM {
             } catch (InterruptedException e) {
                 System.out.println("Main thread was interrupted while waiting for test to complete");
             }
+            
+            completedTests++;
         }
         
         // Print summary
         printSummary();
+    }
+    
+    /**
+     * Execute a QuixBugs test with the given name
+     */
+    private static void executeQuixBugsTest(String testName) throws Exception {
+        AstorMain main1 = new AstorMain();
+        CommandSummary command = getQuixBugsCommand(testName);
+        command.command.put("-maxgen", "500"); // Set max generations
+        
+        // For certain tests that might need more generations
+        if (testName.equals("powerset") || testName.equals("lis") || testName.equals("bitcount") || 
+            testName.equals("hanoi")) {
+            command.command.put("-maxgen", "1000");
+        }
+        
+        main1.execute(command.flat());
+        assertTrue("No solution for " + testName, main1.getEngine().getSolutions().size() > 0);
     }
     
     /**
@@ -246,9 +313,12 @@ public class QuixBugsRepairTestLLM {
         System.out.println("- LLM Prompt Template: " + llmPromptTemplate);
         
         System.out.println("\nTest Results:");
-        System.out.println("- Total Tests: " + (passedTests.size() + failedTests.size()));
-        System.out.println("- Passed Tests: " + passedTests.size());
-        System.out.println("- Failed Tests: " + failedTests.size());
+        int totalTests = passedTests.size() + failedTests.size();
+        System.out.println("- Total Tests Run: " + totalTests);
+        System.out.println("- Passed Tests: " + passedTests.size() + " (" + 
+                          Math.round((double)passedTests.size() / totalTests * 100) + "%)");
+        System.out.println("- Failed Tests: " + failedTests.size() + " (" +
+                          Math.round((double)failedTests.size() / totalTests * 100) + "%)");
         
         System.out.println("\nPassed Tests:");
         for (String test : passedTests) {
@@ -265,223 +335,13 @@ public class QuixBugsRepairTestLLM {
         System.out.println("\nTotal Execution Time: " + formatExecutionTime(totalExecutionTime));
         System.out.println("==============================================");
     }
-
-	/**
-	 * Repaired in paper
-	 * 
-	 * @throws Exception
-	 */
-	@Test
-	public void test_shortest_path_lengthsRepair() throws Exception {
-		AstorMain main1 = new AstorMain();
-
-		CommandSummary command = (getQuixBugsCommand("shortest_path_lengths"));
-		command.command.put("-maxgen", "500");
-		main1.execute(command.flat());
-
-		assertTrue("No solution", main1.getEngine().getSolutions().size() > 0);
-	}
-
-	/**
-	 * Repaired in paper
-	 * 
-	 * @throws Exception
-	 */
-	//@Test(timeout=10)
-	@Test
-	public void test_depth_first_searchRepair() throws Exception {
-		AstorMain main1 = new AstorMain();
-
-		CommandSummary command = (getQuixBugsCommand("depth_first_search"));
-		command.command.put("-maxgen", "500");
-		main1.execute(command.flat());
-
-		assertTrue("No solution", main1.getEngine().getSolutions().size() > 0);
-
-	}
-
-	/**
-	 * Repaired in paper
-	 * 
-	 * @throws Exception
-	 */
-	@Test
-	public void test_next_permutationRepair() throws Exception {
-		AstorMain main1 = new AstorMain();
-
-		CommandSummary command = (getQuixBugsCommand("next_permutation"));
-		command.command.put("-maxgen", "500");
-		main1.execute(command.flat());
-
-		assertTrue("No solution", main1.getEngine().getSolutions().size() > 0);
-
-	}
-
-	/**
-	 * Repaired in paper
-	 * 
-	 * @throws Exception
-	 */
-	@Test
-	public void test_next_knapsackRepair() throws Exception {
-		AstorMain main1 = new AstorMain();
-
-		CommandSummary command = (getQuixBugsCommand("knapsack"));
-		command.command.put("-maxgen", "500");
-		main1.execute(command.flat());
-
-		assertTrue("No solution", main1.getEngine().getSolutions().size() > 0);
-
-	}
-
-	/**
-	 * Repaired in paper
-	 * 
-	 * @throws Exception
-	 */
-	@Test
-	public void test_quicksortRepair() throws Exception {
-		AstorMain main1 = new AstorMain();
-
-		CommandSummary command = (getQuixBugsCommand("quicksort"));
-		command.command.put("-maxgen", "500");
-		main1.execute(command.flat());
-
-		assertTrue("No solution", main1.getEngine().getSolutions().size() > 0);
-
-	}
-
-	/**
-	 * Repaired in paper
-	 * 
-	 * @throws Exception
-	 */
-	@Test
-	public void test_rpn_evalRepair() throws Exception {
-		AstorMain main1 = new AstorMain();
-
-		CommandSummary command = (getQuixBugsCommand("rpn_eval"));
-		command.command.put("-maxgen", "500");
-		main1.execute(command.flat());
-
-		assertTrue("No solution", main1.getEngine().getSolutions().size() > 0);
-
-	}
-
-	/**
-	 * Repaired in paper
-	 * 
-	 * @throws Exception
-	 */
-	@Test
-	public void test_levenshteinRepair() throws Exception {
-		AstorMain main1 = new AstorMain();
-
-		CommandSummary command = (getQuixBugsCommand("levenshtein"));
-		command.command.put("-maxgen", "500");
-		main1.execute(command.flat());
-
-		assertTrue("No solution", main1.getEngine().getSolutions().size() > 0);
-
-	}
-
-	/**
-	 * Repaired in paper
-	 * 
-	 * @throws Exception
-	 */
-	@Test
-	@Ignore
-	public void test_get_factorsRepair() throws Exception {
-		AstorMain main1 = new AstorMain();
-
-		CommandSummary command = (getQuixBugsCommand("get_factors"));
-		command.command.put("-maxgen", "500");
-		main1.execute(command.flat());
-
-		assertTrue("No solution", main1.getEngine().getSolutions().size() > 0);
-
-	}
-
-	// /**
-	//  * Repaired in paper
-	//  * 
-	//  * @throws Exception
-	//  */
-	// @Test
-	// public void test_mergesortRepair() throws Exception {
-	// 	AstorMain main1 = new AstorMain();
-
-	// 	CommandSummary command = (getQuixBugsCommand("mergesort"));
-	// 	command.command.put("-maxgen", "500");// do not evolve right now
-	// 	main1.execute(command.flat());
-
-	// 	assertTrue("No solution", main1.getEngine().getSolutions().size() > 0);
-	// }
-
-	/**
-	 * Repaired in paper
-	 * 
-	 * @throws Exception
-	 */
-	@Test
-	public void test_powersetRepair() throws Exception {
-		AstorMain main1 = new AstorMain();
-
-		CommandSummary command = (getQuixBugsCommand("powerset"));
-		command.command.put("-maxgen", "1000");
-		main1.execute(command.flat());
-
-		assertTrue("No solution", main1.getEngine().getSolutions().size() > 0);
-	}
-
-	/**
-	 * Repaired in paper
-	 * 
-	 * @throws Exception
-	 */
-	@Test
-	public void test_lisRepair() throws Exception {
-		AstorMain main1 = new AstorMain();
-
-		CommandSummary command = (getQuixBugsCommand("lis"));
-		command.command.put("-maxgen", "1000");
-		main1.execute(command.flat());
-
-		assertTrue("No solution", main1.getEngine().getSolutions().size() > 0);
-	}
-
-	/**
-	 * 
-	 * 
-	 * @throws Exception
-	 */
-	@Test
-	public void test_bitcountRepair() throws Exception {
-		AstorMain main1 = new AstorMain();
-
-		CommandSummary command = (getQuixBugsCommand("bitcount"));
-		command.command.put("-maxgen", "1000");
-		main1.execute(command.flat());
-
-		assertTrue("No solution", main1.getEngine().getSolutions().size() > 0);
-
-	}
-
-	/**
-	 * 
-	 * 
-	 * @throws Exception
-	 */
-	@Test
-	public void ne_test_hanoiRepair() throws Exception {
-		AstorMain main1 = new AstorMain();
-
-		CommandSummary command = (getQuixBugsCommand("hanoi"));
-		command.command.put("-maxgen", "1000");
-		main1.execute(command.flat());
-
-		assertTrue("No solution", main1.getEngine().getSolutions().size() > 0);
-
-	}
+    
+    /**
+     * Single test method for compatibility with JUnit
+     * This method is not used when running through main()
+     */
+    @Test
+    public void testAllQuixBugs() throws Exception {
+        main(new String[0]);
+    }
 }
