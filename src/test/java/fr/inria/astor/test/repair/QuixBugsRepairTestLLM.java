@@ -87,8 +87,8 @@ public class QuixBugsRepairTestLLM {
         // Store the LLM parameters for later reporting
         llmService = "ollama";
         llmModel = "codellama:13b";
-        maxSuggestionsPerPoint = 1;
-        llmPromptTemplate = "UNIQUE_SOLUTION";
+        maxSuggestionsPerPoint = 3;
+        llmPromptTemplate = "MULT_SOLUTION";
         
         cs.command.put("-parameters",
                 "logtestexecution" + File.pathSeparator + "TRUE" + File.pathSeparator + "" + "disablelog"
@@ -457,6 +457,23 @@ public class QuixBugsRepairTestLLM {
 	 * @throws Exception
 	 */
 	@Test
+	public void test_bitcountRepair() throws Exception {
+		AstorMain main1 = new AstorMain();
+
+		CommandSummary command = (getQuixBugsCommand("bitcount"));
+		command.command.put("-maxgen", "1000");
+		main1.execute(command.flat());
+
+		assertTrue("No solution", main1.getEngine().getSolutions().size() > 0);
+
+	}
+
+	/**
+	 * 
+	 * 
+	 * @throws Exception
+	 */
+	@Test
 	public void ne_test_hanoiRepair() throws Exception {
 		AstorMain main1 = new AstorMain();
 
@@ -467,5 +484,4 @@ public class QuixBugsRepairTestLLM {
 		assertTrue("No solution", main1.getEngine().getSolutions().size() > 0);
 
 	}
-
 }
