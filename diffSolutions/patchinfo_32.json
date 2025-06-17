@@ -1,25 +1,24 @@
 {
   "VARIANT_ID": "32",
-  "VALIDATION": "|true|0|6|[]|",
+  "VALIDATION": "|true|0|8|[]|",
   "patchhunks": [
     {
-      "LOCATION": "java_programs.RPN_EVAL",
-      "PATH": "C:\\\\astor\\\\examples\\\\quixbugscompiled\\\\rpn_eval\\\\src\\\\java_programs\\\\RPN_EVAL.java",
+      "LOCATION": "java_programs.NEXT_PERMUTATION",
+      "PATH": "C:\\\\Users\\\\Lenovo\\\\Desktop\\\\UPC\\\\TFG_Clone\\\\astorTFGFork\\\\examples\\\\quixbugscompiled\\\\next_permutation\\\\src\\\\java_programs\\\\NEXT_PERMUTATION.java",
       "INGREDIENT_SCOPE": "-",
-      "SUSPICIOUNESS": "0,707",
-      "INGREDIENT_PARENT": "_BinaryOperator_0.apply(_Double_1, _Double_2)",
-      "PATCH_HUNK_TYPE": "CtInvocationImpl|CtAssignmentImpl",
-      "ORIGINAL_CODE": "bin_op.apply(a, b)",
-      "BUGGY_CODE_TYPE": "CtInvocationImpl|CtAssignmentImpl",
-      "OPERATOR": "ExpressionReplaceOperator",
-      "MODIFIED_FILE_PATH": "C:\\\\astor\\\\.\\\\output_astor\\\\AstorMain-rpn_eval\\\\\\/src\\/\\\\variant-32\\\\java_programs\\\\RPN_EVAL.java",
-      "LINE": "34",
-      "MP_RANKING": "19",
-      "PATCH_HUNK_CODE": "bin_op.apply(b, a)"
+      "ORIGINAL_CODE": "if (perm.get(j) \u003c perm.get(i)) {\\r\\n\\tjava.util.ArrayList\u003cjava.lang.Integer\u003e next_perm \u003d perm;\\r\\n\\tint temp_j \u003d perm.get(j);\\r\\n\\tint temp_i \u003d perm.get(i);\\r\\n\\tnext_perm.set(i, temp_j);\\r\\n\\tnext_perm.set(j, temp_i);\\r\\n\\r\\n\\tjava.util.ArrayList\u003cjava.lang.Integer\u003e reversed \u003d new java.util.ArrayList\u003cjava.lang.Integer\u003e(100);\\r\\n\\tfor (int k \u003d next_perm.size() - 1; k !\u003d i; k--) {\\r\\n\\t\\treversed.add(next_perm.get(k));\\r\\n\\t}\\r\\n\\r\\n\\tint q \u003d i + 1;\\r\\n\\tfor (java.lang.Integer replace : reversed) {\\r\\n\\t\\tnext_perm.set(q, replace);\\r\\n\\t\\tq++;\\r\\n\\t}\\r\\n\\r\\n\\treturn next_perm;\\r\\n}",
+      "BUGGY_CODE_TYPE": "CtIfImpl|CtBlockImpl",
+      "OPERATOR": "ReplaceOp",
+      "MODIFIED_FILE_PATH": "C:\\\\Users\\\\Lenovo\\\\Desktop\\\\UPC\\\\TFG_Clone\\\\astorTFGFork\\\\.\\\\output_astor\\\\AstorMain-next_permutation\\\\\\/src\\/\\\\variant-32\\\\java_programs\\\\NEXT_PERMUTATION.java",
+      "LINE": "19",
+      "SUSPICIOUNESS": "1",
+      "MP_RANKING": "3",
+      "PATCH_HUNK_CODE": "if (perm.get(j) \u003e\u003d perm.get(i)) {\\njava.util.ArrayList\u003cjava.lang.Integer\u003e next_perm \u003d perm;\\nint temp_j \u003d perm.get(j);\\nint temp_i \u003d perm.get(i);\\nnext_perm.set(i, temp_j);\\nnext_perm.set(j, temp_i);\\n\\njava.util.ArrayList\u003cjava.lang.Integer\u003e reversed \u003d new java.util.ArrayList\u003cjava.lang.Integer\u003e(100);\\nfor (int k \u003d next_perm.size() - 1; k !\u003d i; k--) {\\nreversed.add(next_perm.get(k));\\n}\\n\\nint q \u003d i + 1;\\nfor (java.lang.Integer replace : reversed) {\\nnext_perm.set(q, replace);\\nq++;\\n}\\n\\nreturn next_perm;\\n}",
+      "PATCH_HUNK_TYPE": "CtCodeSnippetStatementImpl|CtBlockImpl"
     }
   ],
-  "TIME": "14",
-  "GENERATION": "16",
-  "FOLDER_SOLUTION_CODE": "C:\\\\astor\\\\.\\\\output_astor\\\\AstorMain-rpn_eval\\\\\\/src\\/\\\\variant-32",
-  "PATCH_DIFF_ORIG": "--- C:\\\\astor\\\\examples\\\\quixbugscompiled\\\\rpn_eval\\\\src\\\\java_programs\\\\RPN_EVAL.java\\n+++ C:\\\\astor\\\\examples\\\\quixbugscompiled\\\\rpn_eval\\\\src\\\\java_programs\\\\RPN_EVAL.java\\n@@ -34 +34 @@\\n-\\t\\t\\t\\tc \u003d bin_op.apply(a, b);\\n+\\t\\t\\t\\tc \u003d bin_op.apply(b, a);\\n\\n"
+  "TIME": "169",
+  "GENERATION": "1",
+  "FOLDER_SOLUTION_CODE": "C:\\\\Users\\\\Lenovo\\\\Desktop\\\\UPC\\\\TFG_Clone\\\\astorTFGFork\\\\.\\\\output_astor\\\\AstorMain-next_permutation\\\\\\/src\\/\\\\variant-32",
+  "PATCH_DIFF_ORIG": "--- C:\\\\Users\\\\Lenovo\\\\Desktop\\\\UPC\\\\TFG_Clone\\\\astorTFGFork\\\\examples\\\\quixbugscompiled\\\\next_permutation\\\\src\\\\java_programs\\\\NEXT_PERMUTATION.java\\n+++ C:\\\\Users\\\\Lenovo\\\\Desktop\\\\UPC\\\\TFG_Clone\\\\astorTFGFork\\\\examples\\\\quixbugscompiled\\\\next_permutation\\\\src\\\\java_programs\\\\NEXT_PERMUTATION.java\\n@@ -19 +19 @@\\n-\\t\\t\\t\\t\\tif (perm.get(j) \u003c perm.get(i)) {\\n+\\t\\t\\t\\t\\tif (perm.get(j) \u003e\u003d perm.get(i)) {\\n@@ -38 +38 @@\\n-\\t\\t\\t\\t\\t}\\n+\\t\\t\\t\\t\\t};\\n\\n"
 }

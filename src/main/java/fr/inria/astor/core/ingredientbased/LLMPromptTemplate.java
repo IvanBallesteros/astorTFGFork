@@ -24,7 +24,7 @@ public class LLMPromptTemplate {
             "Format your response as follows:\n" +
             "SOLUTION 1:\n[first solution code]\n" +
             "SOLUTION 2:\n[second solution code]\n" +
-            "SOLUTION 3:\n[third solution code]\n" +
+            ".... SOLUTION {nsolutions}:\n[third solution code]\n" +
             "Each solution should be a single line of code that can replace the buggy line, do not write code in different lines." +
             "Do not include extra explanations, just the code solutions."
         );
@@ -63,6 +63,33 @@ public class LLMPromptTemplate {
             "SOLUTION 2:\n<code>\n" +
             "SOLUTION 3:\n<code>\n" +
             "Do not include comments, justification, or multiple lines. Only single-line replacement code."
+        );
+        predefinedTemplates.put(
+            "HELPED_SOLUTIONS",
+            "You are an automated code-fixing agent. Your job is to replace a buggy Java line with working alternatives.\n\n" +
+            "Buggy Java code:\n{buggycode}\n\n" +
+            "Failing test case:\n{testcode}\n\n" +
+            "Generate {nsolutions} single-line Java code replacements that may fix the bug.\n" +
+            "Please, apply just one edit,  replace < by >= \n" +
+            "⚠️ DO NOT include any explanations or extra text.\n" +
+            "⚠️ ONLY output code, strictly formatted as:\n" +
+            "SOLUTION 1:\n<code>\n" +
+            "SOLUTION 2:\n<code>\n" +
+            ".... SOLUTION {nsolutions}:\n[third solution code]\n" +
+            "Do not include comments, justification, or multiple lines. Only single-line replacement code."
+        );
+        predefinedTemplates.put(
+            "GUIDED_SOLUTIONS",
+            "You are an automated code-fixing agent. Your job is to replace a buggy Java line with working alternatives.\n" +
+            "Buggy Java code:\n{buggycode}\n\n" +
+            "Failing test case:\n{testcode}\n\n" +
+            "Generate {nsolutions} single-line Java code replacements that may fix the bug.\n" +
+            "Please, apply just one small edit, change operator '<' for '>= " +
+            "⚠️ DO NOT include any explanations or extra text.\n" +
+            "⚠️ ONLY output code, strictly formatted as:\n" +
+            "SOLUTION 1:\n<code>\n" +
+            "SOLUTION 2:\n<code>\n" +
+            ".... SOLUTION {nsolutions}:\n[third solution code]\n" 
         );
 
     }

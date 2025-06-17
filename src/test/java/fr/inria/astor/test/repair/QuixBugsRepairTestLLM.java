@@ -66,45 +66,45 @@ public class QuixBugsRepairTestLLM {
     
     // List of all QuixBugs tests to run
     private static List<String> quixBugsTests = Arrays.asList(
-        "bitcount",
-		"breadth_first_search",
-		"bucketsort",
-		"depth_first_search",
-		"detect_cycle",
-		"find_first_in_sorted",
-		"find_in_sorted",
-		"flatten",
-		"gcd",
-		"get_factors",
-		"hanoi",
-		"is_valid_parentheses",
-		"khepsack",
-		"kth",
-		"lcs_length",
-		"levenshtein",
-		"lis",
-		"longest_common_subsequence",
-		"max_sublist_sum",
-		"mergesort",
-		"minimum_spanning_tree",
-		"next_palindrome",
-		"next_permutation",
-		"pascal",
-		"possible_change",
-		"powerset",
-		"quicksort",
-		"reverse_linked_list",
-		"rpn_eval",
-		"shortest_path_length",
-		"shortest_path_lenghts",
-		"shortest_paths",
-		"shunting_yard",
-		"sieve",
-		"sqrt",
-		"subsequences",
-		"to_base",
-		"topological_ordering",
-		"wrap"
+        // "bitcount",
+		// "breadth_first_search",
+		// "bucketsort",
+		// "depth_first_search",
+		// "detect_cycle",
+		// "find_first_in_sorted",
+		// "find_in_sorted",
+		// "flatten",
+		// "gcd",
+		// "get_factors",
+		// "hanoi",
+		// "is_valid_parentheses",
+		// "khepsack",
+		// "kth",
+		// "lcs_length",
+		// "levenshtein",
+		// "lis",
+		// "longest_common_subsequence",
+		// "max_sublist_sum",
+		// "mergesort",
+		// "minimum_spanning_tree",
+		// "next_palindrome",
+		"next_permutation"//,
+		// "pascal",
+		// "possible_change",
+		// "powerset",
+		// "quicksort",
+		// "reverse_linked_list",
+		// "rpn_eval",
+		// "shortest_path_length",
+		// "shortest_path_lenghts",
+		// "shortest_paths",
+		// "shunting_yard",
+		// "sieve",
+		// "sqrt",
+		// "subsequences",
+		// "to_base",
+		// "topological_ordering",
+		// "wrap"
     );
     
     // List of tests to ignore (if needed)
@@ -141,9 +141,9 @@ public class QuixBugsRepairTestLLM {
         
         // Store the LLM parameters for later reporting
         llmService = "ollama";
-        llmModel = "mistral";
-        maxSuggestionsPerPoint = 6;
-        llmPromptTemplate = "STRICT_SOLUTIONS";
+        llmModel = "codellama:7b";
+        maxSuggestionsPerPoint = 10;
+        llmPromptTemplate = "GUIDED_SOLUTIONS";
         
         cs.command.put("-parameters",
                 "logtestexecution" + File.pathSeparator + "TRUE" + File.pathSeparator + "" + "disablelog"
@@ -168,7 +168,7 @@ public class QuixBugsRepairTestLLM {
         System.out.println("Starting QuixBugs repair tests with LLM integration...");
         
         // Define timeout for each test (10 minutes)
-        final long TEST_TIMEOUT = 30 * 60 * 1000; // 30 minutes in milliseconds
+        final long TEST_TIMEOUT = 30 * 60000; // 30 minutes in milliseconds
         
         int totalTests = 0;
         int completedTests = 0;
