@@ -38,6 +38,33 @@ public class LLMPromptTemplate {
             "Solution should be a single line of code that can replace the buggy line, do not write code in different lines." +
             "Do not include extra explanations, just the code solutions."
         );
+        predefinedTemplates.put(
+            "EASY_SOLUTIONS",
+            "There's a bug in the following Java code:\n\n{buggycode}\n" +
+            "The failing test case is:\n\n{testcode}\n" +
+            "Please provide {nsolutions} possible fixes that might make the test pass.\n" +
+            "Solution should be a single line of code that can replace the buggy line, do not write code in different lines." +
+            "Do not include extra explanations, just the code solutions." +
+            "Format your response as follows:\n" +
+            "SOLUTION 1:\n[solution code]\n" +
+            "SOLUTION 2:\n[solution code]\n" +
+            "SOLUTION 3:\n[solution code]\n" +
+            "Don't justify any response, just provide the code solutions."
+        );
+        predefinedTemplates.put(
+            "STRICT_SOLUTIONS",
+            "You are an automated code-fixing agent. Your job is to replace a buggy Java line with working alternatives.\n\n" +
+            "Buggy Java code:\n{buggycode}\n\n" +
+            "Failing test case:\n{testcode}\n\n" +
+            "Generate {nsolutions} single-line Java code replacements that may fix the bug.\n" +
+            "⚠️ DO NOT include any explanations or extra text.\n" +
+            "⚠️ ONLY output code, strictly formatted as:\n" +
+            "SOLUTION 1:\n<code>\n" +
+            "SOLUTION 2:\n<code>\n" +
+            "SOLUTION 3:\n<code>\n" +
+            "Do not include comments, justification, or multiple lines. Only single-line replacement code."
+        );
+
     }
     
     /**

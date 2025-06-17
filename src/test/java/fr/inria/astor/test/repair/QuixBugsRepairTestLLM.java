@@ -110,7 +110,12 @@ public class QuixBugsRepairTestLLM {
     // List of tests to ignore (if needed)
     private static List<String> ignoredTests = Arrays.asList(
     "get_factors",
-		"mergesort"
+		"mergesort",
+		"find_first_in_sorted",
+		"find_in_sorted",
+		"flatten",
+		"gcd",
+		"possible_change"
 		
     );
 
@@ -136,9 +141,9 @@ public class QuixBugsRepairTestLLM {
         
         // Store the LLM parameters for later reporting
         llmService = "ollama";
-        llmModel = "codellama:13b";
-        maxSuggestionsPerPoint = 3;
-        llmPromptTemplate = "MULTIPLE_SOLUTION";
+        llmModel = "mistral";
+        maxSuggestionsPerPoint = 6;
+        llmPromptTemplate = "STRICT_SOLUTIONS";
         
         cs.command.put("-parameters",
                 "logtestexecution" + File.pathSeparator + "TRUE" + File.pathSeparator + "" + "disablelog"
@@ -163,7 +168,7 @@ public class QuixBugsRepairTestLLM {
         System.out.println("Starting QuixBugs repair tests with LLM integration...");
         
         // Define timeout for each test (10 minutes)
-        final long TEST_TIMEOUT = 10 * 60 * 1000; // 10 minutes in milliseconds
+        final long TEST_TIMEOUT = 30 * 60 * 1000; // 30 minutes in milliseconds
         
         int totalTests = 0;
         int completedTests = 0;

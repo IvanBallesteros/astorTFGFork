@@ -228,8 +228,8 @@ public class LLMIngredientEngine extends ExhaustiveSearchEngine implements Ingre
             // Print the raw response
             System.out.println("Raw LLM response:\n" + response); // Show LLM response for debugging. 
             
-            // Check if we're using the multiple solutions template
-            if (templateName != null && templateName.equals("MULTIPLE_SOLUTIONS")) {
+    
+            if (templateName != null) {
                 // Extract multiple solutions from the response
                 candidates = extractMultipleSolutions(response);
             } else {
