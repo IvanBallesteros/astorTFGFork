@@ -1,0 +1,24 @@
+{
+  "VARIANT_ID": "72",
+  "VALIDATION": "|true|0|13|[]|",
+  "patchhunks": [
+    {
+      "LOCATION": "java_programs.QUICKSORT",
+      "PATH": "C:\\\\Users\\\\Lenovo\\\\Desktop\\\\UPC\\\\TFG_Clone\\\\astorTFGFork\\\\examples\\\\quixbugscompiled\\\\quicksort\\\\src\\\\java_programs\\\\QUICKSORT.java",
+      "INGREDIENT_SCOPE": "-",
+      "ORIGINAL_CODE": "if (x \u003c pivot) {\\r\\n\\tlesser.add(x);\\r\\n} else if (x \u003e pivot) {\\r\\n\\tgreater.add(x);\\r\\n}",
+      "BUGGY_CODE_TYPE": "CtIfImpl|CtBlockImpl",
+      "OPERATOR": "ReplaceOp",
+      "MODIFIED_FILE_PATH": "C:\\\\Users\\\\Lenovo\\\\Desktop\\\\UPC\\\\TFG_Clone\\\\astorTFGFork\\\\.\\\\output_astor\\\\AstorMain-quicksort\\\\\\/src\\/\\\\variant-72\\\\java_programs\\\\QUICKSORT.java",
+      "LINE": "24",
+      "SUSPICIOUNESS": "0,277",
+      "MP_RANKING": "7",
+      "PATCH_HUNK_CODE": "if (x \u003c\u003d pivot) {\\nlesser.add(x);\\n} else if (x \u003e pivot) {\\ngreater.add(x);\\n}",
+      "PATCH_HUNK_TYPE": "CtCodeSnippetStatementImpl|CtBlockImpl"
+    }
+  ],
+  "TIME": "499",
+  "GENERATION": "1",
+  "FOLDER_SOLUTION_CODE": "C:\\\\Users\\\\Lenovo\\\\Desktop\\\\UPC\\\\TFG_Clone\\\\astorTFGFork\\\\.\\\\output_astor\\\\AstorMain-quicksort\\\\\\/src\\/\\\\variant-72",
+  "PATCH_DIFF_ORIG": "--- C:\\\\Users\\\\Lenovo\\\\Desktop\\\\UPC\\\\TFG_Clone\\\\astorTFGFork\\\\examples\\\\quixbugscompiled\\\\quicksort\\\\src\\\\java_programs\\\\QUICKSORT.java\\n+++ C:\\\\Users\\\\Lenovo\\\\Desktop\\\\UPC\\\\TFG_Clone\\\\astorTFGFork\\\\examples\\\\quixbugscompiled\\\\quicksort\\\\src\\\\java_programs\\\\QUICKSORT.java\\n@@ -24 +24 @@\\n-\\t\\t\\tif (x \u003c pivot) {\\n+\\t\\t\\tif (x \u003c\u003d pivot) {\\n@@ -28 +28 @@\\n-\\t\\t\\t}\\n+\\t\\t\\t};\\n\\n"
+}

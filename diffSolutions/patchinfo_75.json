@@ -1,0 +1,24 @@
+{
+  "VARIANT_ID": "75",
+  "VALIDATION": "|true|0|5|[]|",
+  "patchhunks": [
+    {
+      "LOCATION": "java_programs.DETECT_CYCLE",
+      "PATH": "C:\\\\Users\\\\Lenovo\\\\Desktop\\\\UPC\\\\TFG_Clone\\\\astorTFGFork\\\\examples\\\\quixbugscompiled\\\\detect_cycle\\\\src\\\\java_programs\\\\DETECT_CYCLE.java",
+      "INGREDIENT_SCOPE": "-",
+      "ORIGINAL_CODE": "if (hare.getSuccessor() \u003d\u003d null) \\r\\n{ \\treturn false;}",
+      "BUGGY_CODE_TYPE": "CtIfImpl|CtBlockImpl",
+      "OPERATOR": "ReplaceOp",
+      "MODIFIED_FILE_PATH": "C:\\\\Users\\\\Lenovo\\\\Desktop\\\\UPC\\\\TFG_Clone\\\\astorTFGFork\\\\.\\\\output_astor\\\\AstorMain-detect_cycle\\\\\\/src\\/\\\\variant-75\\\\java_programs\\\\DETECT_CYCLE.java",
+      "LINE": "18",
+      "SUSPICIOUNESS": "0,447",
+      "MP_RANKING": "7",
+      "PATCH_HUNK_CODE": "if (hare.getSuccessor() \u003d\u003d null || hare.getSuccessor().getSuccessor() \u003d\u003d null)\\n{ \\treturn false;}",
+      "PATCH_HUNK_TYPE": "CtCodeSnippetStatementImpl|CtBlockImpl"
+    }
+  ],
+  "TIME": "368",
+  "GENERATION": "1",
+  "FOLDER_SOLUTION_CODE": "C:\\\\Users\\\\Lenovo\\\\Desktop\\\\UPC\\\\TFG_Clone\\\\astorTFGFork\\\\.\\\\output_astor\\\\AstorMain-detect_cycle\\\\\\/src\\/\\\\variant-75",
+  "PATCH_DIFF_ORIG": "--- C:\\\\Users\\\\Lenovo\\\\Desktop\\\\UPC\\\\TFG_Clone\\\\astorTFGFork\\\\examples\\\\quixbugscompiled\\\\detect_cycle\\\\src\\\\java_programs\\\\DETECT_CYCLE.java\\n+++ C:\\\\Users\\\\Lenovo\\\\Desktop\\\\UPC\\\\TFG_Clone\\\\astorTFGFork\\\\examples\\\\quixbugscompiled\\\\detect_cycle\\\\src\\\\java_programs\\\\DETECT_CYCLE.java\\n@@ -18,2 +18,2 @@\\n-\\t\\t\\tif (hare.getSuccessor() \u003d\u003d null)\\n-\\t\\t\\t\\treturn false;\\n+\\t\\t\\tif (hare.getSuccessor() \u003d\u003d null || hare.getSuccessor().getSuccessor() \u003d\u003d null)\\n+\\t\\t\\t{ \\treturn false;};\\n\\n"
+}

@@ -1,0 +1,9 @@
+--- C:\Users\Lenovo\Desktop\UPC\TFG_Clone\astorTFGFork\examples\quixbugscompiled\pascal\src\java_programs\PASCAL.java
++++ C:\Users\Lenovo\Desktop\UPC\TFG_Clone\astorTFGFork\examples\quixbugscompiled\pascal\src\java_programs\PASCAL.java
+@@ -22 +22 @@
+-			for (int c = 0; c < r; c++) {
++			for (int c = 0; c <= r; c++) {
+@@ -35 +35 @@
+-			}
++			};
+

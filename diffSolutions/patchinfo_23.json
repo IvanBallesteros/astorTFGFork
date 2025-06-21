@@ -1,0 +1,24 @@
+{
+  "VARIANT_ID": "23",
+  "VALIDATION": "|true|0|9|[]|",
+  "patchhunks": [
+    {
+      "LOCATION": "java_programs.BITCOUNT",
+      "PATH": "C:\\\\Users\\\\Lenovo\\\\Desktop\\\\UPC\\\\TFG_Clone\\\\astorTFGFork\\\\examples\\\\quixbugscompiled\\\\bitcount\\\\src\\\\java_programs\\\\BITCOUNT.java",
+      "INGREDIENT_SCOPE": "-",
+      "ORIGINAL_CODE": "n \u003d n ^ (n - 1)",
+      "BUGGY_CODE_TYPE": "CtAssignmentImpl|CtBlockImpl",
+      "OPERATOR": "ReplaceOp",
+      "MODIFIED_FILE_PATH": "C:\\\\Users\\\\Lenovo\\\\Desktop\\\\UPC\\\\TFG_Clone\\\\astorTFGFork\\\\.\\\\output_astor\\\\AstorMain-bitcount\\\\\\/src\\/\\\\variant-23\\\\java_programs\\\\BITCOUNT.java",
+      "LINE": "15",
+      "SUSPICIOUNESS": "1",
+      "MP_RANKING": "2",
+      "PATCH_HUNK_CODE": "n \u003d n \u0026 (n - 1);",
+      "PATCH_HUNK_TYPE": "CtCodeSnippetStatementImpl|CtBlockImpl"
+    }
+  ],
+  "TIME": "188",
+  "GENERATION": "1",
+  "FOLDER_SOLUTION_CODE": "C:\\\\Users\\\\Lenovo\\\\Desktop\\\\UPC\\\\TFG_Clone\\\\astorTFGFork\\\\.\\\\output_astor\\\\AstorMain-bitcount\\\\\\/src\\/\\\\variant-23",
+  "PATCH_DIFF_ORIG": "--- C:\\\\Users\\\\Lenovo\\\\Desktop\\\\UPC\\\\TFG_Clone\\\\astorTFGFork\\\\examples\\\\quixbugscompiled\\\\bitcount\\\\src\\\\java_programs\\\\BITCOUNT.java\\n+++ C:\\\\Users\\\\Lenovo\\\\Desktop\\\\UPC\\\\TFG_Clone\\\\astorTFGFork\\\\examples\\\\quixbugscompiled\\\\bitcount\\\\src\\\\java_programs\\\\BITCOUNT.java\\n@@ -15 +15 @@\\n-\\t\\t\\tn \u003d n ^ (n - 1);\\n+\\t\\t\\tn \u003d n \u0026 (n - 1);;\\n\\n"
+}

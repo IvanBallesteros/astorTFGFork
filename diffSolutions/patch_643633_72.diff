@@ -1,0 +1,9 @@
+--- C:\Users\Lenovo\Desktop\UPC\TFG_Clone\astorTFGFork\examples\quixbugscompiled\quicksort\src\java_programs\QUICKSORT.java
++++ C:\Users\Lenovo\Desktop\UPC\TFG_Clone\astorTFGFork\examples\quixbugscompiled\quicksort\src\java_programs\QUICKSORT.java
+@@ -24 +24 @@
+-			if (x < pivot) {
++			if (x <= pivot) {
+@@ -28 +28 @@
+-			}
++			};
+

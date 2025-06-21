@@ -1,0 +1,8 @@
+--- C:\Users\Lenovo\Desktop\UPC\TFG_Clone\astorTFGFork\examples\quixbugscompiled\detect_cycle\src\java_programs\DETECT_CYCLE.java
++++ C:\Users\Lenovo\Desktop\UPC\TFG_Clone\astorTFGFork\examples\quixbugscompiled\detect_cycle\src\java_programs\DETECT_CYCLE.java
+@@ -18,2 +18,2 @@
+-			if (hare.getSuccessor() == null)
+-				return false;
++			if (hare.getSuccessor() == null || hare.getSuccessor().getSuccessor() == null)
++			{ 	return false;};
+

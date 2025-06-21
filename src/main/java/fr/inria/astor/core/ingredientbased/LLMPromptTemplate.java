@@ -80,11 +80,24 @@ public class LLMPromptTemplate {
         );
         predefinedTemplates.put(
             "GUIDED_SOLUTIONS",
+            "You are an automated code-fixing agent. Your job is to replace a buggy Java line with a modification of it.\n" +
+            "Buggy Java line code:\n{buggycode}\n\n" +
+            "Failing test case:\n{testcode}\n\n" +
+            "Generate {nsolutions} single-line Java code replacements that may fix the bug.\n" +
+            "Please, apply just one small edit on the line provided.\n" +
+            "⚠️ DO NOT include any explanations or extra text.\n" +
+            "⚠️ ONLY output code, strictly formatted as:\n" +
+            "SOLUTION 1:\n<code>\n" +
+            "SOLUTION 2:\n<code>\n" +
+            ".... SOLUTION {nsolutions}:\n[third solution code]\n" 
+        );
+        predefinedTemplates.put(
+            "NEXT_PERMUTATION_HARDCODED",
             "You are an automated code-fixing agent. Your job is to replace a buggy Java line with working alternatives.\n" +
             "Buggy Java code:\n{buggycode}\n\n" +
             "Failing test case:\n{testcode}\n\n" +
             "Generate {nsolutions} single-line Java code replacements that may fix the bug.\n" +
-            "Please, apply just one small edit, change operator '<' for '>= " +
+            "Please, apply just one small edit, change operator '<' for '>='" +
             "⚠️ DO NOT include any explanations or extra text.\n" +
             "⚠️ ONLY output code, strictly formatted as:\n" +
             "SOLUTION 1:\n<code>\n" +
